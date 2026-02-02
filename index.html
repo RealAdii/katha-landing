@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katha - Stories, Not Ads</title>
+    <meta name="description" content="Katha is the new way brands actually get remembered. Stop buying attention. Start earning it.">
+    <meta name="theme-color" content="#FAFAF8">
+    <meta name="author" content="Katha">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://katha.xyz">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>K</text></svg>">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://katha.xyz">
+    <meta property="og:title" content="Katha - Stories, Not Ads">
+    <meta property="og:description" content="The new way brands actually get remembered. Stop buying attention. Start earning it.">
+    <meta property="og:image" content="https://katha.xyz/og-image.png">
+    <meta property="og:site_name" content="Katha">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://katha.xyz">
+    <meta name="twitter:title" content="Katha - Stories, Not Ads">
+    <meta name="twitter:description" content="The new way brands actually get remembered. Stop buying attention. Start earning it.">
+    <meta name="twitter:image" content="https://katha.xyz/og-image.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-bg: #FAFAF8;
+            --color-text: #1a1714;
+            --color-text-muted: rgba(26, 23, 20, 0.45);
+            --color-accent: #D4622A;
+            --color-accent-warm: #C4875F;
+
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --font-editorial: 'Crimson Pro', Georgia, serif;
+
+            --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --ease-dramatic: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 20px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s var(--ease-smooth),
+                        opacity 0.2s var(--ease-smooth);
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(4);
+            opacity: 0.3;
+        }
+
+        /* Noise Overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            animation: fadeIn 1s var(--ease-dramatic) 0.5s forwards;
+        }
+
+        .nav-cta {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(232, 228, 223, 0.2);
+            border-radius: 100px;
+            transition: all 0.4s var(--ease-dramatic);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1s var(--ease-dramatic) 0.7s forwards;
+        }
+
+        .nav-cta:hover {
+            background: var(--color-text);
+            color: var(--color-bg);
+            border-color: var(--color-text);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 10rem;
+            padding-bottom: 6rem;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-dramatic) 0.3s forwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 7rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 0;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title .line-inner {
+            display: block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: lineReveal 1.2s var(--ease-dramatic) forwards;
+        }
+
+        .hero-title .line:nth-child(1) .line-inner { animation-delay: 0.4s; }
+        .hero-title .line:nth-child(2) .line-inner { animation-delay: 0.5s; }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        /* Scroll Cue */
+        .scroll-cue {
+            position: fixed;
+            bottom: 3rem;
+            left: 4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s var(--ease-dramatic) 1.5s forwards;
+            transition: opacity 0.5s var(--ease-smooth);
+        }
+
+        .scroll-cue.hidden {
+            opacity: 0 !important;
+        }
+
+        .scroll-cue span {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+        }
+
+        .scroll-line {
+            width: 40px;
+            height: 1px;
+            background: var(--color-text-muted);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background: var(--color-accent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        /* Content Blocks */
+        .block {
+            padding: 8rem 0;
+        }
+
+        .block-text {
+            font-family: var(--font-editorial);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            line-height: 1.8;
+            color: var(--color-text-muted);
+        }
+
+        .block-text p {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s var(--ease-dramatic);
+        }
+
+        .block-text p.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .block-text strong {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .block-text em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        /* Large Statement */
+        .statement {
+            padding: 12rem 0;
+        }
+
+        .statement-text {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 7vw, 5rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .statement-text .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--ease-dramatic);
+        }
+
+        .statement-text .word.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .statement-text em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        /* Divider */
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--color-accent), transparent);
+            margin: 0 0 4rem 0;
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: all 1s var(--ease-dramatic);
+        }
+
+        .divider.visible {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+
+        /* Brand Reveal */
+        .brand-reveal {
+            padding: 16rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .brand-name {
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 25vw, 18rem);
+            letter-spacing: -0.04em;
+            line-height: 1;
+            background: linear-gradient(180deg, var(--color-text) 0%, var(--color-text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.2s var(--ease-dramatic);
+        }
+
+        .brand-name.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .brand-tagline {
+            font-family: var(--font-editorial);
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--color-text-muted);
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s var(--ease-dramatic) 0.3s;
+        }
+
+        .brand-tagline.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CTA */
+        .cta {
+            padding: 8rem 0 12rem;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.2;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-title em {
+            font-style: italic;
+            color: var(--color-accent);
+            display: block;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-bg);
+            background: var(--color-text);
+            padding: 1.25rem 2.5rem;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.5s var(--ease-dramatic);
+        }
+
+        .cta-button:hover {
+            background: var(--color-accent);
+            color: var(--color-bg);
+            transform: scale(1.05);
+        }
+
+        .cta-button svg {
+            transition: transform 0.3s var(--ease-smooth);
+        }
+
+        .cta-button:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(26, 23, 20, 0.08);
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s var(--ease-smooth);
+        }
+
+        .footer-logo:hover {
+            color: var(--color-accent);
+        }
+
+        /* Progress Bar */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-warm));
+            z-index: 1001;
+            transition: width 0.1s linear;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes lineReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scrollLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            main {
+                padding: 0 2rem;
+            }
+
+            .scroll-cue {
+                left: 2rem;
+            }
+
+            footer {
+                padding: 3rem 2rem;
+            }
+
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="noise"></div>
+    <div class="progress"></div>
+
+    <nav>
+        <a href="https://katha.xyz" class="logo">katha</a>
+        <a href="#cta" class="nav-cta">Start Your Journey</a>
+    </nav>
+
+    <div class="scroll-cue">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <span class="hero-eyebrow">The new way brands get remembered</span>
+            <h1 class="hero-title">
+                <span class="line"><span class="line-inner">People remember</span></span>
+                <span class="line"><span class="line-inner"><em>stories,</em> not ads.</span></span>
+            </h1>
+        </section>
+
+        <!-- Opening -->
+        <section class="block">
+            <div class="block-text">
+                <p>Anyone with a story worth telling can build an audience.</p>
+                <p>But most brands have <strong>forgotten how to tell theirs.</strong></p>
+            </div>
+        </section>
+
+        <!-- Problem -->
+        <section class="block">
+            <div class="divider"></div>
+            <div class="block-text">
+                <p>Agencies, ad platforms, performance marketers &mdash; all seem "results-driven" while churning out <em>forgettable content that dies in 24 hours.</em></p>
+                <p>They built systems that reward impressions, not impact.</p>
+                <p>And in doing so, something seemingly obvious got lost:</p>
+            </div>
+        </section>
+
+        <!-- Statement 1 -->
+        <section class="statement">
+            <p class="statement-text">
+                <span class="word">People</span>
+                <span class="word">don't</span>
+                <span class="word">connect</span>
+                <span class="word">with</span>
+                <span class="word">logos,</span>
+                <span class="word">taglines,</span>
+                <span class="word">or</span>
+                <span class="word">"brand</span>
+                <span class="word">guidelines"</span>
+                <span class="word">&mdash;</span>
+                <span class="word">they</span>
+                <span class="word">connect</span>
+                <span class="word">with</span>
+                <span class="word"><em>narratives</em></span>
+                <span class="word">that</span>
+                <span class="word">feel</span>
+                <span class="word">human.</span>
+            </p>
+        </section>
+
+        <!-- Nike Quote -->
+        <section class="block">
+            <div class="block-text">
+                <p>You don't remember Nike's media buy.</p>
+                <p>You remember <em>"Just Do It."</em></p>
+            </div>
+        </section>
+
+        <!-- Realization -->
+        <section class="block">
+            <div class="divider"></div>
+            <div class="block-text">
+                <p>Every founder knows their brand has a story.</p>
+                <p>Most just don't know how to tell it.</p>
+                <p>Attention still flows to paid channels that interrupt, not organic content that <em>earns.</em></p>
+            </div>
+        </section>
+
+        <!-- Brand Reveal -->
+        <section class="brand-reveal">
+            <h2 class="brand-name">katha</h2>
+            <p class="brand-tagline">That's what we're changing.</p>
+        </section>
+
+        <!-- Manifesto -->
+        <section class="block">
+            <div class="block-text">
+                <p>We want to <strong>kill the performance marketing hamster wheel.</strong></p>
+                <p>The industry tells you to spend more, optimize harder, chase algorithms until your CAC bleeds you dry.</p>
+            </div>
+        </section>
+
+        <!-- Statement 2 -->
+        <section class="statement">
+            <p class="statement-text">
+                <span class="word">Take</span>
+                <span class="word">control</span>
+                <span class="word">of</span>
+                <span class="word">your</span>
+                <span class="word">brand</span>
+                <span class="word">with</span>
+                <span class="word"><em>organic</em></span>
+                <span class="word"><em>storytelling</em></span>
+                <span class="word">&mdash;</span>
+                <span class="word">content</span>
+                <span class="word">that</span>
+                <span class="word">compounds</span>
+                <span class="word">instead</span>
+                <span class="word">of</span>
+                <span class="word">expires.</span>
+            </p>
+        </section>
+
+        <!-- Closing -->
+        <section class="block">
+            <div class="divider"></div>
+            <div class="block-text">
+                <p>The best audiences in the world crave what you have &mdash;</p>
+                <p><strong>a story worth following.</strong></p>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta" id="cta">
+            <h2 class="cta-title">
+                Stop buying attention.
+                <em>Start earning it.</em>
+            </h2>
+            <a href="https://katha.xyz/join" class="cta-button">
+                <span>Start Your Journey</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <a href="https://katha.xyz" class="footer-logo">katha.xyz</a>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effects
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Progress bar
+        const progress = document.querySelector('.progress');
+        const scrollCue = document.querySelector('.scroll-cue');
+
+        function updateProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progress.style.width = scrollPercent + '%';
+
+            // Hide scroll cue after scrolling
+            if (scrollTop > 100) {
+                scrollCue.classList.add('hidden');
+            } else {
+                scrollCue.classList.remove('hidden');
+            }
+        }
+
+        // Scroll reveal for paragraphs
+        function revealOnScroll() {
+            const paragraphs = document.querySelectorAll('.block-text p');
+            const dividers = document.querySelectorAll('.divider');
+            const words = document.querySelectorAll('.statement-text .word');
+            const brandName = document.querySelector('.brand-name');
+            const brandTagline = document.querySelector('.brand-tagline');
+
+            paragraphs.forEach(p => {
+                const rect = p.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    p.classList.add('visible');
+                }
+            });
+
+            dividers.forEach(d => {
+                const rect = d.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 50) {
+                    d.classList.add('visible');
+                }
+            });
+
+            words.forEach((word, index) => {
+                const rect = word.parentElement.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    setTimeout(() => {
+                        word.classList.add('visible');
+                    }, index * 50);
+                }
+            });
+
+            if (brandName) {
+                const rect = brandName.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    brandName.classList.add('visible');
+                    brandTagline.classList.add('visible');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            updateProgress();
+            revealOnScroll();
+        });
+
+        // Initial check
+        updateProgress();
+        revealOnScroll();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
